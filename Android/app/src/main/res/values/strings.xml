@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Toprak Kokusu</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="email_address">Email</string>
+    <string name="password">Parola</string>
+    <string name="login_button">Giriş</string>
+    <string name="user_name">Kullanıcı Adı</string>
+</resources>
