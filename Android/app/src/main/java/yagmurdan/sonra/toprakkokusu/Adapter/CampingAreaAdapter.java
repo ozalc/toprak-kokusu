@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,35 +35,53 @@ public class CampingAreaAdapter extends RecyclerView.Adapter<CampingAreaAdapter.
     public Context mContext;
     public List<CampingArea> mCampingArea;
 
+    private OnCampingAreaListener mOnCampingAreaListener;
 
-    public CampingAreaAdapter(Context mContext, List<CampingArea> mCampingArea) {
+
+    public CampingAreaAdapter(Context mContext, List<CampingArea> mCampingArea, OnCampingAreaListener onCampingAreaListener) {
         this.mContext = mContext;
         this.mCampingArea = mCampingArea;
+        this.mOnCampingAreaListener = onCampingAreaListener;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public ImageView CampingAreaImage;
         public TextView CampingAreaIsim, CampingAreaLokasyon;
+        OnCampingAreaListener onCampingAreaListener;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, OnCampingAreaListener onCampingAreaListener) {
             super(itemView);
 
             CampingAreaImage = itemView.findViewById(R.id.CampingAreaItemImageView);
             CampingAreaIsim = itemView.findViewById(R.id.CampingAreaItemTextViewKampAdi);
             CampingAreaLokasyon = itemView.findViewById(R.id.CampingAreaItemTextViewLokasyon);
+
+            this.onCampingAreaListener = onCampingAreaListener;
+
+            itemView.setOnClickListener(this);
+            CampingAreaImage.setOnClickListener(this);
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            onCampingAreaListener.onCampingAreaClick(getAdapterPosition());
         }
     }
+
+    //Bu method, adaptör oluşturulduğunda çağrılır ve ViewHolder'larımızı başlatmak için kullanılır.
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(mContext).inflate(R.layout.camping_area_item, parent, false);
+        return new ViewHolder(view,mOnCampingAreaListener);
 
-        return new ViewHolder(view);
     }
 
 
+    //Verilerimizi ViewHolder'ımıza ileteceğimiz yer burasıdır.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
@@ -72,7 +91,6 @@ public class CampingAreaAdapter extends RecyclerView.Adapter<CampingAreaAdapter.
         holder.CampingAreaLokasyon.setText(currentCampingArea.getLocation());
         Glide.with(mContext)
                 .load(currentCampingArea.getGonderiResmi())
-                .fitCenter()
                 .into(holder.CampingAreaImage);
 
     }
@@ -82,4 +100,7 @@ public class CampingAreaAdapter extends RecyclerView.Adapter<CampingAreaAdapter.
         return mCampingArea.size();
     }
 
+    public interface OnCampingAreaListener{
+        void onCampingAreaClick(int position);
+    }
 }

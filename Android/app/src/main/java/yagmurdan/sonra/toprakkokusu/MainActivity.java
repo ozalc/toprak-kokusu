@@ -49,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         loadFragment(new HomeFragment());
-        BottomNavigationView bottomNav;
-        bottomNav = findViewById(R.id.bottom_navigation);
+        BottomNavigationView bottomNav = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
     }
 

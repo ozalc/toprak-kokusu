@@ -6,7 +6,6 @@
     tools:context=".ui.CampingMainUI.CampingMainPageFragment">
 
 
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/RecyclerViewCampingMainPage"
             android:layout_width="match_parent"

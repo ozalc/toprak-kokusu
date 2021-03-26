@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_marginTop="10dp">
 
-    <ImageView
+    <ImageButton
         android:id="@+id/CampingAreaItemImageView"
         android:layout_width="wrap_content"
         android:layout_height="250dp"
@@ -22,7 +22,7 @@
 
     <TextView
         android:id="@+id/CampingAreaItemTextViewKampAdi"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:text="Kapıkaya"
         android:textStyle="bold"
@@ -30,7 +30,9 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CampingAreaItemImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/CampingAreaItemImageView"
+        android:layout_below="@+id/CampingAreaItemImageView"
+        />
 
     <TextView
         android:id="@+id/CampingAreaItemTextViewLokasyon"
@@ -41,6 +43,8 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CampingAreaItemTextViewKampAdi" />
+        app:layout_constraintTop_toBottomOf="@+id/CampingAreaItemTextViewKampAdi"
+        android:layout_below="@+id/CampingAreaItemTextViewKampAdi"
+        />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

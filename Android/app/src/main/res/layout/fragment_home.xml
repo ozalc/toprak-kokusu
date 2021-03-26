@@ -40,6 +40,8 @@
             android:layout_gravity="center_horizontal"
             android:background="@drawable/bungalov"
             android:scaleType="centerCrop" />
+
     </LinearLayout>
+
 
 </ScrollView>

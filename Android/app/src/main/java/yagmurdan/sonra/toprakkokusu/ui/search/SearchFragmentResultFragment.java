@@ -27,7 +27,7 @@ import yagmurdan.sonra.toprakkokusu.R;
 
 
 
-public class SearchFragmentResultFragment extends Fragment {
+public class SearchFragmentResultFragment extends Fragment implements CampingAreaAdapter.OnCampingAreaListener {
 
     private RecyclerView recyclerView;
     private CampingAreaAdapter campingAreaAdapter;
@@ -60,7 +60,7 @@ public class SearchFragmentResultFragment extends Fragment {
 
         campingList = new ArrayList<>();
 
-        campingAreaAdapter = new CampingAreaAdapter(getContext(), campingList);
+        campingAreaAdapter = new CampingAreaAdapter(getContext(), campingList, this);
 
         recyclerView.setAdapter(campingAreaAdapter);
 
@@ -96,6 +96,11 @@ public class SearchFragmentResultFragment extends Fragment {
 
             }
         });
+
+    }
+
+    @Override
+    public void onCampingAreaClick(int position) {
 
     }
 }
