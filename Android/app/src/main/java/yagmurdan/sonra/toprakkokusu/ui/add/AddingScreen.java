@@ -12,10 +12,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -46,15 +49,16 @@ import yagmurdan.sonra.toprakkokusu.ui.Authentication.RegisterActivity;
 import yagmurdan.sonra.toprakkokusu.ui.CampingMainUI.CampingMainPageFragment;
 import yagmurdan.sonra.toprakkokusu.ui.profile.ProfileFragment;
 
-public class AddingScreen extends AppCompatActivity {
+public class AddingScreen extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private DatabaseReference databaseReference;
     private FirebaseStorage mStorage;
     private StorageReference storageReference;
     private StorageTask uploadTask;
+    private String SelectedCity;
 
 
     private EditText EditTextName;
-    private EditText EditTextLocationName;
+    private Spinner SpinnerLokasyonAdi;
     private Switch SwitchUcret;
     private Switch SwitchTesis;
     private Switch SwitchTopluTasima;
@@ -86,7 +90,7 @@ public class AddingScreen extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference("Camping Areas");
 
         EditTextName = (EditText) findViewById(R.id.EditTextKampAdi);
-        EditTextLocationName = findViewById(R.id.EditTextLokasyonAdi);
+
         SwitchUcret = findViewById(R.id.SwitchUcretli);
         SwitchTesis = findViewById(R.id.SwitchTesis);
         SwitchTopluTasima = findViewById(R.id.SwitchTopluTasima);
@@ -99,7 +103,13 @@ public class AddingScreen extends AppCompatActivity {
         SwitchOdun = findViewById(R.id.SwitchOdun);
         AddingScreenImageView = findViewById(R.id.AddingScreenImageView);
         EditTextName = findViewById(R.id.EditTextKampAdi);
-        EditTextLocationName = findViewById(R.id.EditTextLokasyonAdi);
+
+        SpinnerLokasyonAdi = findViewById(R.id.SpinnerLokasyonAdi);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.cityArrayList, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        SpinnerLokasyonAdi.setAdapter(adapter);
+        SpinnerLokasyonAdi.setOnItemSelectedListener(this);
+
 
         Kaydet = findViewById(R.id.KaydetButton);
         ResimSec = findViewById(R.id.ResimSec);
@@ -283,7 +293,7 @@ public class AddingScreen extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         //task başarılı ise Modelin bir örneği oluşturulur ve bu örnek üzerinden işlemler yapılır.
                         Toast.makeText(AddingScreen.this, "Yükleme Başarılı", Toast.LENGTH_SHORT);
-                        CampingArea upload = new CampingArea(task.getResult().toString(), EditTextName.getText().toString(), EditTextLocationName.getText().toString());
+                        CampingArea upload = new CampingArea(task.getResult().toString(), EditTextName.getText().toString(), SelectedCity);
                         //veritabanındaki o yüklemeye ait key'i alıyoruz ve o key'i kullanarak bir node oluşturuyoruz
                         // o node içine setValue kullanarak oluşturduğumuz modelin örneğini gönderiyoruz
                         String uploadID = databaseReference.push().getKey();
@@ -299,5 +309,17 @@ public class AddingScreen extends AppCompatActivity {
             });
 
         }
+    }
+
+    //Spinner
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        SelectedCity = parent.getItemAtPosition(position).toString();
+
+    }
+    //Spinner
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

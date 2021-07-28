@@ -44,7 +44,7 @@ public class ProfileFragment extends Fragment {
     protected Button logOutButton;
     private FloatingActionButton fab_main, fab1_feedback, fab2_share;
     private Animation fab_open, fab_close, fab_clock, fab_anticlock;
-    private TextView textView_share;
+    private TextView textView_share, textView_feedback;
     private ImageView profileImage;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -72,6 +72,7 @@ public class ProfileFragment extends Fragment {
         fab_anticlock = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_rotate_anticlock);
         profileImage = (ImageView) view.findViewById(R.id.circle_profile_image);
         textView_share = (TextView) view.findViewById(R.id.textview_share);
+        textView_feedback = view.findViewById(R.id.textview_feedback);
         profileName = (TextView) view.findViewById(R.id.profileName);
 
         //Default olarak standart bir profil resmi koyuyoruz.
@@ -103,6 +104,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 if(isOpen){
                     textView_share.setVisibility((View.INVISIBLE));
+                    textView_feedback.setVisibility(View.INVISIBLE);
                     fab2_share.setVisibility(View.INVISIBLE);
                     fab1_feedback.setVisibility(View.INVISIBLE);
                     fab2_share.startAnimation(fab_close);
@@ -114,6 +116,7 @@ public class ProfileFragment extends Fragment {
                 }
                 else {
                     textView_share.setVisibility(View.VISIBLE);
+                    textView_feedback.setVisibility(View.VISIBLE);
                     fab1_feedback.setVisibility(View.VISIBLE);
                     fab2_share.setVisibility(View.VISIBLE);
                     fab1_feedback.startAnimation(fab_open);

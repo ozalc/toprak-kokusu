@@ -29,7 +29,8 @@
                     android:layout_below="@id/profileName"
                     android:layout_centerHorizontal="true"
                     android:layout_weight="2"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    android:textColor="@color/black"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -38,7 +39,8 @@
                     android:layout_below="@id/profileName"
                     android:layout_centerHorizontal="true"
                     android:layout_weight="2"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    android:textColor="@color/black"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -48,7 +50,8 @@
                     android:layout_below="@id/profileName"
                     android:layout_centerHorizontal="true"
                     android:layout_weight="2"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    android:textColor="@color/black"/>
 
 
         </LinearLayout>
@@ -68,7 +71,8 @@
                     android:textSize="20sp"
                     android:layout_centerHorizontal="true"
                     android:layout_weight="2"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    android:textColor="@color/black"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -78,7 +82,8 @@
                     android:layout_below="@id/profileName"
                     android:layout_centerHorizontal="true"
                     android:layout_weight="2"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    android:textColor="@color/black"/>
 
                 <TextView
                     android:layout_width="0dp"
@@ -89,7 +94,8 @@
                     android:layout_below="@id/profileName"
                     android:layout_centerHorizontal="true"
                     android:layout_weight="2"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    android:textColor="@color/black"/>
 
 
         </LinearLayout>

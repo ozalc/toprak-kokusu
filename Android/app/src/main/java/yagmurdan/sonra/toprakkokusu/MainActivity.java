@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         loadFragment(new HomeFragment());
         BottomNavigationView bottomNav = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
+
     }
 
     //BottomNavigatioView'e seçili navigation butonu için bir listener tanımlanır
