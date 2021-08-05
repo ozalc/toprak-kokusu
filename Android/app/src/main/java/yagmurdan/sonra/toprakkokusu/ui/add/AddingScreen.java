@@ -3,11 +3,14 @@ package yagmurdan.sonra.toprakkokusu.ui.add;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -18,45 +21,31 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
-import com.google.firebase.storage.UploadTask;
-
-import org.w3c.dom.Text;
-
-import java.util.HashMap;
-import java.util.UUID;
-
 import yagmurdan.sonra.toprakkokusu.MainActivity;
 import yagmurdan.sonra.toprakkokusu.Model.CampingArea;
 import yagmurdan.sonra.toprakkokusu.R;
-import yagmurdan.sonra.toprakkokusu.ui.Authentication.LoginActivity;
-import yagmurdan.sonra.toprakkokusu.ui.Authentication.RegisterActivity;
-import yagmurdan.sonra.toprakkokusu.ui.CampingMainUI.CampingMainPageFragment;
-import yagmurdan.sonra.toprakkokusu.ui.profile.ProfileFragment;
+
 
 public class AddingScreen extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
     private DatabaseReference databaseReference;
     private FirebaseStorage mStorage;
     private StorageReference storageReference;
     private StorageTask uploadTask;
     private String SelectedCity;
-
-
     private EditText EditTextName;
     private Spinner SpinnerLokasyonAdi;
     private Switch SwitchUcret;
@@ -69,15 +58,17 @@ public class AddingScreen extends AppCompatActivity implements AdapterView.OnIte
     private Switch SwitchAtesYakilmaz;
     private Switch SwitchSinyalVar;
     private Switch SwitchOdun;
-
-
     private Button Kaydet;
     private Button ResimSec;
     private ImageView AddingScreenImageView;
-
-
+    private EditText EditTextKampAlaniAciklama;
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 71;
+    private Button KonumSec;
+    public EditText editTextLatitute;
+    public EditText editTextLongitute;
+    public RatingBar ratingBar;
+
 
     CampingArea campingArea = new CampingArea();
 
@@ -85,11 +76,14 @@ public class AddingScreen extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         setContentView(R.layout.activity_adding_screen);
         storageReference = FirebaseStorage.getInstance().getReference("Camping images");
         databaseReference = FirebaseDatabase.getInstance().getReference("Camping Areas");
 
-        EditTextName = (EditText) findViewById(R.id.EditTextKampAdi);
+        EditTextName = findViewById(R.id.EditTextKampAdi);
 
         SwitchUcret = findViewById(R.id.SwitchUcretli);
         SwitchTesis = findViewById(R.id.SwitchTesis);
@@ -103,9 +97,11 @@ public class AddingScreen extends AppCompatActivity implements AdapterView.OnIte
         SwitchOdun = findViewById(R.id.SwitchOdun);
         AddingScreenImageView = findViewById(R.id.AddingScreenImageView);
         EditTextName = findViewById(R.id.EditTextKampAdi);
+        editTextLatitute=findViewById(R.id.editTextLatitude);
+        editTextLongitute=findViewById(R.id.editTextLongitute);
 
         SpinnerLokasyonAdi = findViewById(R.id.SpinnerLokasyonAdi);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.cityArrayList, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.cityArrayList, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         SpinnerLokasyonAdi.setAdapter(adapter);
         SpinnerLokasyonAdi.setOnItemSelectedListener(this);
@@ -114,6 +110,12 @@ public class AddingScreen extends AppCompatActivity implements AdapterView.OnIte
         Kaydet = findViewById(R.id.KaydetButton);
         ResimSec = findViewById(R.id.ResimSec);
         AddingScreenImageView = findViewById(R.id.AddingScreenImageView);
+
+        EditTextKampAlaniAciklama = findViewById(R.id.EdittextKampAciklama);
+
+        KonumSec = findViewById(R.id.KonumSec);
+
+        ratingBar=findViewById(R.id.ratingBar);
 
         //kaydet butonuna tıklanınca saveToDatabase metodu çalıştırılır
         Kaydet.setOnClickListener(new View.OnClickListener() {
@@ -130,6 +132,16 @@ public class AddingScreen extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onClick(View v) {
                 chooseImage();
+            }
+        });
+
+        Fragment fragment = new MapsFragment();
+        KonumSec.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutMaps,fragment).commit();
+
+
             }
         });
 
@@ -234,6 +246,7 @@ public class AddingScreen extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
+
     }
 
     //resim seç butonuna tıklayınca çalışan metot
@@ -267,6 +280,11 @@ public class AddingScreen extends AppCompatActivity implements AdapterView.OnIte
 
     //kaydet butonuna tıklayınca çalışan fonksiyon
     private void saveToDatabase() {
+        SharedPreferences sharedPref = getSharedPreferences("SharedPref", Context.MODE_PRIVATE);
+
+        double latitude = Double.parseDouble(sharedPref.getString("latitude",null));
+        double longitute = Double.parseDouble(sharedPref.getString("longitute",null));
+
 
         if (filePath != null) {
             StorageReference dosyaYolu = storageReference.child(System.currentTimeMillis()
@@ -293,11 +311,16 @@ public class AddingScreen extends AppCompatActivity implements AdapterView.OnIte
                     if (task.isSuccessful()) {
                         //task başarılı ise Modelin bir örneği oluşturulur ve bu örnek üzerinden işlemler yapılır.
                         Toast.makeText(AddingScreen.this, "Yükleme Başarılı", Toast.LENGTH_SHORT);
-                        CampingArea upload = new CampingArea(task.getResult().toString(), EditTextName.getText().toString(), SelectedCity);
-                        //veritabanındaki o yüklemeye ait key'i alıyoruz ve o key'i kullanarak bir node oluşturuyoruz
-                        // o node içine setValue kullanarak oluşturduğumuz modelin örneğini gönderiyoruz
+                        campingArea.setGonderiResmi(task.getResult().toString());
+                        campingArea.setName(EditTextName.getText().toString());
+                        campingArea.setTanitim(EditTextKampAlaniAciklama.getText().toString());
+                        campingArea.setLocation(SelectedCity);
+                        campingArea.setLatitute(latitude);
+                        campingArea.setLongitute(longitute);
+                        campingArea.setRating(ratingBar.getRating());
+
                         String uploadID = databaseReference.push().getKey();
-                        databaseReference.child(uploadID).setValue(upload);
+                        databaseReference.child(uploadID).setValue(campingArea);
                         progressDialog.dismiss();
 
                         Intent intent = new Intent(AddingScreen.this, MainActivity.class);
@@ -307,7 +330,6 @@ public class AddingScreen extends AppCompatActivity implements AdapterView.OnIte
 
                 }
             });
-
         }
     }
 
@@ -322,4 +344,5 @@ public class AddingScreen extends AppCompatActivity implements AdapterView.OnIte
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
 }

@@ -8,9 +8,8 @@ import java.util.List;
 public class CampingArea {
 
     private String GonderiResmi;
-
     private String Name;
-
+    private String Tanitim;
     private String Location;
     private Boolean BoolUcret = false;
     private Boolean BoolTesis = false;
@@ -22,14 +21,19 @@ public class CampingArea {
     private Boolean BoolAtesYakilmaz = false;
     private Boolean BoolSinyalVar = false;
     private Boolean BoolOdun = false;
+    private double Latitute;
+    private double Longitute;
+    private float Rating;
+
 
     public CampingArea() {
     }
 
-    public CampingArea(String gonderiResmi, String name, String location) {
+    public CampingArea(String gonderiResmi, String name, String tanitim, String location) {
         GonderiResmi = gonderiResmi;
         Name = name;
         Location = location;
+        this.Tanitim = tanitim;
     }
 
     public String getName() {
@@ -131,5 +135,34 @@ public class CampingArea {
 
     public void setGonderiResmi(String gonderiResmi) {
         GonderiResmi = gonderiResmi;
+    }
+
+    public String getTanitim() { return Tanitim; }
+
+    public void setTanitim(String tanitim) { Tanitim = tanitim; }
+
+
+    public double getLatitute() {
+        return Latitute;
+    }
+
+    public void setLatitute(double latitute) {
+        Latitute = latitute;
+    }
+
+    public double getLongitute() {
+        return Longitute;
+    }
+
+    public void setLongitute(double longitute) {
+        Longitute = longitute;
+    }
+
+    public float getRating() {
+        return Rating;
+    }
+
+    public void setRating(float rating) {
+        Rating = rating;
     }
 }

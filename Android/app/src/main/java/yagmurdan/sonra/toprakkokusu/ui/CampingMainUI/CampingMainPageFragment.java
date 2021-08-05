@@ -36,6 +36,7 @@ public class CampingMainPageFragment extends Fragment implements CampingAreaAdap
     private CampingAreaAdapter campingAreaAdapter;
     private List<CampingArea> campingList;
     private CampingArea selectedCampingArea;
+    public String key;
 
 
 
@@ -67,8 +68,6 @@ public class CampingMainPageFragment extends Fragment implements CampingAreaAdap
         //kamp listesini getirme metodu
         campingListRead();
 
-
-
         return view;
     }
 
@@ -85,10 +84,9 @@ public class CampingMainPageFragment extends Fragment implements CampingAreaAdap
                 campingList.clear();
                 for(DataSnapshot campingSnapshot : snapshot.getChildren())
                 {
-
                     CampingArea campingArea = campingSnapshot.getValue(CampingArea.class);
                     campingList.add(campingArea);
-
+                    key = campingSnapshot.getKey();
                 }
                 campingAreaAdapter.notifyDataSetChanged();
             }
@@ -109,6 +107,7 @@ public class CampingMainPageFragment extends Fragment implements CampingAreaAdap
         Bundle bundle = new Bundle();
         bundle.putString("selectedCampingAreaName",selectedCampingArea.getName());
         bundle.putString("selectedCampingAreaLocation", selectedCampingArea.getLocation());
+        bundle.putString("selectedCampingAreaid", key);
 
         campingAreaDetailFragment.setArguments(bundle);
 

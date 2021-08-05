@@ -44,7 +44,7 @@ public class CampingAreaAdapter extends RecyclerView.Adapter<CampingAreaAdapter.
         this.mOnCampingAreaListener = onCampingAreaListener;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public ImageView CampingAreaImage;
         public TextView CampingAreaIsim, CampingAreaLokasyon;
@@ -76,7 +76,7 @@ public class CampingAreaAdapter extends RecyclerView.Adapter<CampingAreaAdapter.
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(mContext).inflate(R.layout.camping_area_item, parent, false);
-        return new ViewHolder(view,mOnCampingAreaListener);
+        return new ViewHolder(view, mOnCampingAreaListener);
 
     }
 
@@ -92,7 +92,6 @@ public class CampingAreaAdapter extends RecyclerView.Adapter<CampingAreaAdapter.
         Glide.with(mContext)
                 .load(currentCampingArea.getGonderiResmi())
                 .into(holder.CampingAreaImage);
-
     }
 
     @Override
@@ -100,7 +99,7 @@ public class CampingAreaAdapter extends RecyclerView.Adapter<CampingAreaAdapter.
         return mCampingArea.size();
     }
 
-    public interface OnCampingAreaListener{
+    public interface OnCampingAreaListener {
         void onCampingAreaClick(int position);
     }
 }

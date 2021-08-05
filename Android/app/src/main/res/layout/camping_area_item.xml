@@ -18,24 +18,22 @@
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-         />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/CampingAreaItemTextViewKampAdi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Kapıkaya"
-        android:textStyle="bold"
-        android:textSize="30dp"
+        android:layout_below="@+id/CampingAreaItemImageView"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CampingAreaItemImageView"
-        android:layout_below="@+id/CampingAreaItemImageView"
-        android:textColor="@color/black"
+        android:text="Kapıkaya"
         android:textAllCaps="true"
-        />
+        android:textColor="@color/black"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CampingAreaItemImageView" />
 
     <TextView
         android:id="@+id/CampingAreaItemTextViewLokasyon"
