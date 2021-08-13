@@ -66,14 +66,94 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/selectedCampingAreaImageDetail"
                 android:layout_marginEnd="20dp"/>
-            <View
 
+            <GridLayout
+                android:id="@id/favoriteGridLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:columnCount="3"
+                android:rowCount="2"
+                app:layout_constraintBottom_toTopOf="@+id/view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/selectedCampingAreaLocationDetail">
+
+                <com.like.LikeButton
+                    android:id="@+id/CampingAreaDetailFavorite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="0"
+                    android:layout_column="0"
+                    android:layout_gravity="center"
+                    app:icon_size="10dp"
+                    app:icon_type="heart"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="1"
+                    android:layout_column="0"
+                    android:gravity="center"
+                    android:text="Favorilere\nEkle"
+                    android:textAlignment="center"
+                    android:textColor="@color/black" />
+
+                <com.like.LikeButton
+                    android:id="@+id/CampingAreaDetailGittim"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="0"
+                    android:layout_column="1"
+                    android:layout_gravity="center"
+                    app:icon_size="10dp"
+                    app:icon_type="star"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="1"
+                    android:layout_column="1"
+                    android:gravity="center"
+                    android:text="Gittim"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"/>
+
+                <com.like.LikeButton
+                    android:id="@+id/CampingAreaDetailGidilecek"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="0"
+                    android:layout_column="2"
+                    android:layout_gravity="center"
+                    app:icon_size="10dp"
+                    app:like_drawable="@drawable/backpacker_green"
+                    app:unlike_drawable="@drawable/backpacker"
+                    app:icon_type="star"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="1"
+                    android:layout_column="2"
+                    android:gravity="center"
+                    android:text="Gideceğim"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"/>
+
+
+
+            </GridLayout>
+
+            <View
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:background="@color/black"
-                app:layout_constraintTop_toBottomOf="@+id/selectedCampingAreaLocationDetail" />
+                app:layout_constraintTop_toBottomOf="@+id/favoriteGridLayout" />
             <Button
                 android:id="@+id/buttonFeatures"
                 android:layout_width="wrap_content"

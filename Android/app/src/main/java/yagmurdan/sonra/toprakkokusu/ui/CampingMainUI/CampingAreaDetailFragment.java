@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -54,6 +55,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.android.gms.maps.*;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
+
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -71,7 +75,7 @@ public class CampingAreaDetailFragment extends Fragment implements OnMapReadyCal
     private CommentAdapter commentAdapter;
     private List<Comment> commentList;
     CampingArea SelectedArea;
-    private String selectedCampingAreaName,selectedCampingAreaLocation,CampingAreaKey,uid;
+    private String selectedCampingAreaName,selectedCampingAreaLocation,CampingAreaKey;
     private Button buttonFeatures,buttonDeclaration, buttonMap,commentButtonYorumYap,buttonShowComments;
     private TextView textViewDeclaration,selectedCampingAreaNameDetail,selectedCampingAreaLocationDetail;
     public EditText commentEditText;
@@ -85,6 +89,7 @@ public class CampingAreaDetailFragment extends Fragment implements OnMapReadyCal
     double Latitude,Longitute;
     private RatingBar ratingBar;
     public FirebaseAuth mAuth;
+    private LikeButton likeButton,gittim,gideceğim;
 
         @Override
         public void onMapReady(GoogleMap googleMap) {
@@ -110,6 +115,13 @@ public class CampingAreaDetailFragment extends Fragment implements OnMapReadyCal
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.remove(CampingAreaDetailFragment.newInstance()).commit();
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment mapFragment =
@@ -124,6 +136,12 @@ public class CampingAreaDetailFragment extends Fragment implements OnMapReadyCal
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_camping_area_detail, container, false);
 
+        Bundle bundle = getArguments();
+        if(bundle!=null) {
+            selectedCampingAreaName = bundle.getString("selectedCampingAreaName");
+            selectedCampingAreaLocation = bundle.getString("selectedCampingAreaLocation");
+        }
+
         recyclerView=view.findViewById(R.id.RecylerViewCampingDetailPage);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(CampingAreaDetailFragment.newInstance().getContext());
@@ -133,6 +151,9 @@ public class CampingAreaDetailFragment extends Fragment implements OnMapReadyCal
         recyclerView.setAdapter(commentAdapter);
         //-----------------------------------------------------------------------
 
+        gittim=view.findViewById(R.id.CampingAreaDetailGittim);
+        gideceğim=view.findViewById(R.id.CampingAreaDetailGidilecek);
+        likeButton=view.findViewById(R.id.CampingAreaDetailFavorite);
         campingAreaDetailCommentView=view.findViewById(R.id.campingAreaDetailCommentView);
         campingAreaDetailLinearComment=view.findViewById(R.id.CampingAreaDetailLinearComment);
         buttonShowComments=view.findViewById(R.id.buttonShowComments);
@@ -163,19 +184,156 @@ public class CampingAreaDetailFragment extends Fragment implements OnMapReadyCal
 
         mAuth=FirebaseAuth.getInstance();
         String user_id=mAuth.getCurrentUser().getUid();
-        setProfileImageToCommentSection(user_id);
-        commentListRead();
-
-        Bundle bundle = getArguments();
-        if(bundle!=null) {
-            selectedCampingAreaName = bundle.getString("selectedCampingAreaName");
-            selectedCampingAreaLocation = bundle.getString("selectedCampingAreaLocation");
-            uid = bundle.getString("selectedCampingAreaid");
-        }
 
 
 
 
+
+
+
+
+        likeButton.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                liked();
+            }
+
+            private void liked() {
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(user_id).child("likedCampingAreas");
+
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        HashMap<String, String> hashMap= new HashMap<>();
+                        hashMap.put("likedCampingAreaID", CampingAreaKey);
+
+                        databaseReference.push().setValue(hashMap);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(user_id).child("likedCampingAreas");
+
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                        {
+
+                            if (dataSnapshot.child("likedCampingAreaID").getValue(String.class).equals(CampingAreaKey))
+                            {
+                                dataSnapshot.getRef().removeValue();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        });
+
+        gittim.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(user_id).child("wentCampingAreas");
+
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        HashMap<String, String> hashMap= new HashMap<>();
+                        hashMap.put("wentCampingAreaID", CampingAreaKey);
+
+                        databaseReference.push().setValue(hashMap);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(user_id).child("wentCampingAreas");
+
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                        {
+
+                            if (dataSnapshot.child("wentCampingAreaID").getValue(String.class).equals(CampingAreaKey))
+                            {
+                                dataSnapshot.getRef().removeValue();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        });
+
+        gideceğim.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(user_id).child("willGoCampingAreas");
+
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        HashMap<String, String> hashMap= new HashMap<>();
+                        hashMap.put("willGoCampingAreaID", CampingAreaKey);
+
+                        databaseReference.push().setValue(hashMap);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(user_id).child("willGoCampingAreas");
+
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                        {
+
+                            if (dataSnapshot.child("willGoCampingAreaID").getValue(String.class).equals(CampingAreaKey))
+                            {
+                                dataSnapshot.getRef().removeValue();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        });
 
         buttonShowComments.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,7 +367,12 @@ public class CampingAreaDetailFragment extends Fragment implements OnMapReadyCal
                     addComment();
             }
         });
+
         getcampingList();
+        commentListRead();
+        setProfileImageToCommentSection(user_id);
+        readUserCampInfos(user_id);
+
         buttonFeatures.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,7 +384,6 @@ public class CampingAreaDetailFragment extends Fragment implements OnMapReadyCal
                 }
                 else
                 {
-
                     gridLayout.setVisibility(View.VISIBLE);
                     ratingBar.setVisibility(View.VISIBLE);
                 }
@@ -246,35 +408,25 @@ public class CampingAreaDetailFragment extends Fragment implements OnMapReadyCal
 
     private void commentListRead() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Camping Areas");
-
         databaseReference.addValueEventListener(new ValueEventListener() {
-
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 commentList.clear();
-                for(DataSnapshot camping : snapshot.getChildren())
-                {
-                    if (camping.getKey()==uid)
-                    {
-                            for (DataSnapshot eachComment : camping.child("Comments").getChildren())
-                            {
+                for(DataSnapshot camping : snapshot.getChildren()) {
+                    if (camping.getKey()==CampingAreaKey) {
+                            for (DataSnapshot eachComment : camping.child("Comments").getChildren()) {
                                 Comment comment = eachComment.getValue(Comment.class);
                                 commentList.add(comment);
                             }
                         commentAdapter.notifyDataSetChanged();
                     }
-
                 }
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
-
 
     private void getcampingList() {
 
@@ -289,7 +441,7 @@ public class CampingAreaDetailFragment extends Fragment implements OnMapReadyCal
                 {
                     CampingArea campingArea = campingSnapshot.getValue(CampingArea.class);
                     SelectedArea=campingArea;
-                    if(selectedCampingAreaName.equals(campingSnapshot.getValue(CampingArea.class).getName()) ||
+                    if(selectedCampingAreaName.equals(campingSnapshot.getValue(CampingArea.class).getName()) &&
                             selectedCampingAreaLocation.equals(campingSnapshot.getValue(CampingArea.class).getLocation()))
                     {
                        CampingAreaKey = campingSnapshot.getKey();
@@ -379,9 +531,12 @@ public class CampingAreaDetailFragment extends Fragment implements OnMapReadyCal
             databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Glide.with(CampingAreaDetailFragment.this)
-                            .load(snapshot.child("image").getValue())
-                            .into(commentImageView);
+                    if(snapshot.child("image").getValue()!=null)
+                    {
+                        /*Glide.with(CampingAreaDetailFragment.this)
+                                .load(snapshot.child("image").getValue())
+                                .into(commentImageView);*/
+                    }
                 }
 
                 @Override
@@ -389,5 +544,63 @@ public class CampingAreaDetailFragment extends Fragment implements OnMapReadyCal
 
                 }
             });
+    }
+
+    private void readUserCampInfos(String user_id) {
+        DatabaseReference likeRef = FirebaseDatabase.getInstance().getReference("Users").child(user_id).child("likedCampingAreas");
+        DatabaseReference wentRef = FirebaseDatabase.getInstance().getReference("Users").child(user_id).child("wentCampingAreas");
+        DatabaseReference willGoRef = FirebaseDatabase.getInstance().getReference("Users").child(user_id).child("willGoCampingAreas");
+        likeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                {
+                    if (dataSnapshot.child("likedCampingAreaID").getValue().equals(CampingAreaKey))
+                    {
+                        likeButton.setLiked(true);
+                        break;
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        wentRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                {
+                    if (dataSnapshot.child("wentCampingAreaID").getValue().equals(CampingAreaKey))
+                    {
+                        gittim.setLiked(true);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        willGoRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                {
+                    if (dataSnapshot.child("willGoCampingAreaID").getValue().equals(CampingAreaKey))
+                    {
+                        gideceğim.setLiked(true);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

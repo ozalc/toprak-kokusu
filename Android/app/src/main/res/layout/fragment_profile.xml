@@ -7,12 +7,16 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/circle_profile_image"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:id="@+id/circle_profile_image"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="20dp"
+            app:civ_border_color="@color/black"
+            app:civ_border_width="2dp"
+            />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -61,9 +65,9 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_below="@id/layout1"
-            android:layout_marginHorizontal="10dp"
-            >
+            android:layout_marginHorizontal="10dp">
                 <TextView
+                    android:id="@+id/favoritesNumber"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -74,6 +78,7 @@
                     android:gravity="center"
                     android:textColor="@color/black"/>
                 <TextView
+                    android:id="@+id/wentNumber"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -86,6 +91,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
+                    android:id="@+id/willGoNumber"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="0"

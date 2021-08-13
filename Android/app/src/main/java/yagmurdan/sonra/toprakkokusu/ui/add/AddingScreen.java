@@ -106,7 +106,6 @@ public class AddingScreen extends AppCompatActivity implements AdapterView.OnIte
         SpinnerLokasyonAdi.setAdapter(adapter);
         SpinnerLokasyonAdi.setOnItemSelectedListener(this);
 
-
         Kaydet = findViewById(R.id.KaydetButton);
         ResimSec = findViewById(R.id.ResimSec);
         AddingScreenImageView = findViewById(R.id.AddingScreenImageView);

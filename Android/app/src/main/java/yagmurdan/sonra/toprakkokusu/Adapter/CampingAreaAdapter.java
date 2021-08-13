@@ -44,6 +44,11 @@ public class CampingAreaAdapter extends RecyclerView.Adapter<CampingAreaAdapter.
         this.mOnCampingAreaListener = onCampingAreaListener;
     }
 
+    public CampingAreaAdapter(Context applicationContext, List<CampingArea> favoritedCampingAreas) {
+        this.mContext = applicationContext;
+        this.mCampingArea = favoritedCampingAreas;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public ImageView CampingAreaImage;

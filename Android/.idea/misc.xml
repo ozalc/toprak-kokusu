@@ -7,15 +7,23 @@
         <entry key="..\:/Calismalar/Android/Android/app/src/main/res/drawable/img.xml" value="0.22135416666666666" />
         <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/activity_adding_screen.xml" value="0.33" />
         <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/activity_camping_main_page.xml" value="0.23645833333333333" />
+        <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/activity_favorite_camping_areas.xml" value="0.25" />
+        <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/activity_login.xml" value="0.3472222222222222" />
         <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/activity_main.xml" value="0.20520833333333333" />
+        <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/activity_register.xml" value="0.36666666666666664" />
         <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/camping_area_item.xml" value="0.29814814814814816" />
         <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/comment_item.xml" value="0.36666666666666664" />
         <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/fragment_add.xml" value="0.30648148148148147" />
         <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/fragment_camping_area_detail.xml" value="0.33" />
         <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/fragment_camping_main_page.xml" value="0.2101851851851852" />
+        <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/fragment_favorite_camping_areas.xml" value="0.36666666666666664" />
         <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/fragment_map.xml" value="0.2234375" />
         <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/fragment_maps.xml" value="0.35260416666666666" />
         <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/fragment_profile.xml" value="0.31296296296296294" />
+        <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/fragment_search.xml" value="0.33" />
+        <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/fragment_search_result.xml" value="0.3472222222222222" />
+        <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/fragment_went_camping_areas.xml" value="0.36666666666666664" />
+        <entry key="..\:/Calismalar/Android/Android/app/src/main/res/layout/fragment_will_go_camping_areas.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>

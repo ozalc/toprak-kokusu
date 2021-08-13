@@ -1,10 +1,8 @@
-package yagmurdan.sonra.toprakkokusu.ui.CampingMainUI;
-
+package yagmurdan.sonra.toprakkokusu.ui.profile;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,74 +11,102 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.like.LikeButton;
-import com.like.OnLikeListener;
-
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
 
 import yagmurdan.sonra.toprakkokusu.Adapter.CampingAreaAdapter;
 import yagmurdan.sonra.toprakkokusu.Model.CampingArea;
 import yagmurdan.sonra.toprakkokusu.R;
+import yagmurdan.sonra.toprakkokusu.ui.CampingMainUI.CampingAreaDetailFragment;
 
-
-public class CampingMainPageFragment extends Fragment implements CampingAreaAdapter.OnCampingAreaListener {
+public class WentCampingAreasFragment extends Fragment implements CampingAreaAdapter.OnCampingAreaListener {
 
     private RecyclerView recyclerView;
     private CampingAreaAdapter campingAreaAdapter;
-    private List<CampingArea> campingList = new ArrayList<>();
+    private List<CampingArea> wentCampingAreas = new ArrayList<>();
     private CampingArea selectedCampingArea;
+    private FirebaseAuth mAuth;
+    public List<String> wentCampingAreasId=new ArrayList<>();
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        wentCampingAreas.removeAll(wentCampingAreas);
+        wentCampingAreasId.removeAll(wentCampingAreasId);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_camping_main_page, container, false);
-        //recyclerview ayarları
-        recyclerView = view.findViewById(R.id.RecyclerViewCampingMainPage);
+        View view = inflater.inflate(R.layout.fragment_went_camping_areas, container, false);
+        recyclerView = view.findViewById(R.id.RecyclerViewWentCampingAreas);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        //adapter oluşturulur
-        campingAreaAdapter = new CampingAreaAdapter(getContext(), campingList, this);
-
-        //recyclerview ile adapter eşleştirilir
+        campingAreaAdapter = new CampingAreaAdapter(getContext(), wentCampingAreas, this);
         recyclerView.setAdapter(campingAreaAdapter);
 
-        //kamp listesini getirme metodu
-        campingListRead();
+        mAuth= FirebaseAuth.getInstance();
+        String user_id=mAuth.getCurrentUser().getUid();
 
+        readWentCampingAreasId(user_id);
+        readWentCampingAreasWithId();
         return view;
     }
 
+    private void readWentCampingAreasId(String user_id) {
+        DatabaseReference wentRef = FirebaseDatabase.getInstance().getReference("Users").child(user_id).child("wentCampingAreas");
+        wentRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                {
+                    wentCampingAreasId.add(dataSnapshot.child("wentCampingAreaID").getValue(String.class));
+                }
 
+            }
 
-    //veritabanından datasnapshot ile camp listesini getiririz
-    private void campingListRead ()
-    {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void readWentCampingAreasWithId() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Camping Areas");
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                campingList.clear();
+                wentCampingAreas.clear();
                 for(DataSnapshot campingSnapshot : snapshot.getChildren())
                 {
-                    CampingArea campingArea = campingSnapshot.getValue(CampingArea.class);
-                    campingList.add(campingArea);
+                    for (int i = 0; i<wentCampingAreasId.size();i++)
+                    {
+                        if(campingSnapshot.getKey().equals(wentCampingAreasId.get(i)))
+                        {
+                            CampingArea campingArea = campingSnapshot.getValue(CampingArea.class);
+                            wentCampingAreas.add(campingArea);
+                        }
+                    }
+
+
                 }
                 campingAreaAdapter.notifyDataSetChanged();
             }
@@ -91,12 +117,12 @@ public class CampingMainPageFragment extends Fragment implements CampingAreaAdap
             }
         });
     }
-
     @Override
     public void onCampingAreaClick(int position) {
         CampingAreaDetailFragment campingAreaDetailFragment = new CampingAreaDetailFragment();
 
-        selectedCampingArea = campingList.get(position);
+
+        selectedCampingArea = wentCampingAreas.get(position);
 
         Bundle bundle = new Bundle();
         bundle.putString("selectedCampingAreaName",selectedCampingArea.getName());
@@ -104,9 +130,6 @@ public class CampingMainPageFragment extends Fragment implements CampingAreaAdap
 
         campingAreaDetailFragment.setArguments(bundle);
 
-
         getFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment_container,campingAreaDetailFragment).commit();
     }
-
-
 }

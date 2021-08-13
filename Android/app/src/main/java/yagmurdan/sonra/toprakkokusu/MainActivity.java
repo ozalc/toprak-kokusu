@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import yagmurdan.sonra.toprakkokusu.ui.Authentication.LoginActivity;
 import yagmurdan.sonra.toprakkokusu.ui.add.AddFragment;
@@ -32,21 +33,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAuth=FirebaseAuth.getInstance();
-
         //Giriş yapmamış kullanıcı var ise login ekranına yönlendirilir
-        if(mAuth.getCurrentUser()!=null)
+        mAuth=FirebaseAuth.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user!=null)
         {
             setContentView(R.layout.activity_main);
         }
         else
-            {
-                Intent loginIntent=new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(loginIntent);
-                Toast.makeText(getApplicationContext(), "Lütfen Giriş Yapınız", Toast.LENGTH_SHORT).show();
-
-            }
-
+        {
+            Intent loginIntent=new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(loginIntent);
+            Toast.makeText(getApplicationContext(), "Lütfen Giriş Yapınız", Toast.LENGTH_SHORT).show();
+        }
 
         loadFragment(new HomeFragment());
         BottomNavigationView bottomNav = (BottomNavigationView) findViewById(R.id.bottom_navigation);

@@ -1,8 +1,11 @@
 package yagmurdan.sonra.toprakkokusu.Model;
 
+import java.util.List;
+
 public class User {
     private String image;
     private String Name;
+
 
     public User(){
 
@@ -13,11 +16,11 @@ public class User {
         this.Name = name;
     }
 
-    public String getProfilResmi() {
+    public String getimage() {
         return image;
     }
 
-    public void setProfilResmi(String image) {
+    public void setimage(String image) {
         this.image = image;
     }
 
@@ -28,4 +31,6 @@ public class User {
     public void setName(String name) {
         Name = name;
     }
+
+
 }

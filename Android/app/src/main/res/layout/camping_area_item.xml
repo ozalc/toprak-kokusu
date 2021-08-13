@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_marginTop="10dp"
-    >
+    android:layout_marginTop="10dp">
 
     <ImageButton
         android:id="@+id/CampingAreaItemImageView"
@@ -18,7 +17,7 @@
         app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/CampingAreaItemTextViewKampAdi"
@@ -33,7 +32,7 @@
         android:textSize="30dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CampingAreaItemImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/CampingAreaItemImageView"/>
 
     <TextView
         android:id="@+id/CampingAreaItemTextViewLokasyon"
@@ -46,8 +45,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/CampingAreaItemTextViewKampAdi"
         android:layout_below="@+id/CampingAreaItemTextViewKampAdi"
-        android:textAllCaps="true"
-        />
+        android:textAllCaps="true"/>
 
     <ImageView
         android:id="@+id/CampingAreaItemWeather"
@@ -57,8 +55,8 @@
         android:layout_alignEnd="@+id/CampingAreaItemImageView"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:src="@drawable/weather"
-        />
+        android:src="@drawable/weather"/>
+
 
     <View
         android:layout_width="match_parent"
